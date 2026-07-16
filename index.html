@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROJO | Taller Técnico</title>
+    <style>
+        :root { --neon: #ff0000; --fondo-oscuro: rgba(0,0,0,0.75); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: url('rojoportada.png') no-repeat center center fixed; 
+            background-size: cover; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            overflow: hidden; 
+            cursor: crosshair; 
+        }
+        body::before { 
+            content: ''; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: -1; 
+        }
+
+        /* Logo principal */
+        #logo-principal { 
+            position: absolute; 
+            top: 20px; left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 1000; 
+        }
+        #logo-principal img { 
+            width: 120px; 
+            filter: drop-shadow(0 0 15px var(--neon)); 
+            alt="Logotipo oficial de ROJO Ingeniería Automotriz";
+        }
+
+        /* Galería */
+        .galeria { 
+            position: absolute; 
+            top: 120px; left: 20px; 
+            width: 300px; 
+            max-height: 70vh; 
+            overflow-y: auto; 
+            padding: 10px 5px; 
+            background: var(--fondo-oscuro); 
+            border: 1px solid var(--neon); 
+            border-radius: 8px;
+        }
+        .galeria::-webkit-scrollbar { width: 6px; }
+        .galeria::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 3px; }
+
+        .item { 
+            display: flex; align-items: center; gap: 15px; 
+            padding: 10px; margin-bottom: 8px;
+            border-left: 4px solid var(--neon); 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            color: #fff; 
+            border-radius: 0 6px 6px 0;
+        }
+        .item:hover { 
+            background: rgba(255, 0, 0, 0.2); 
+            border-left: 10px solid #ff3333; 
+            padding-left: 20px;
+        }
+        .item img { 
+            width: 100px; height: 70px; 
+            object-fit: cover; border-radius: 4px; 
+        }
+        .item p { font-size: 0.9rem; font-weight: 500; }
+
+        /* Visor de imágenes */
+        #visor { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            display: none; 
+            justify-content: center; align-items: center; 
+            z-index: 9999; 
+            cursor: zoom-out;
+        }
+        #visor img { 
+            max-width: 85%; max-height: 75vh; 
+            border: 3px solid var(--neon); 
+            box-shadow: 0 0 30px var(--neon); 
+            border-radius: 8px;
+            alt="Vista ampliada del proyecto seleccionado";
+        }
+
+        /* Logo SIDC */
+        #logo-sidc { 
+            position: fixed; 
+            bottom: 25px; left: 180px; 
+            z-index: 1000; 
+            transition: transform 0.2s ease; 
+        }
+        #logo-sidc img { 
+            width: 55px; height: auto; 
+            border-radius: 50%; 
+            filter: drop-shadow(0 0 8px #fff); 
+            alt="Ir a SIDC - Servicios Integrales Cázares";
+        }
+        #logo-sidc:hover { transform: scale(1.15); }
+
+        /* Bocho volador */
+        #bocho-volador { 
+            position: fixed; 
+            bottom: 20px; left: -150px; 
+            width: 150px; height: auto;
+            z-index: 1000; 
+            filter: drop-shadow(0 0 15px var(--neon)); 
+            pointer-events: none; 
+            alt="Vocho clásico modificado por ROJO";
+        }
+        .vuelo { animation: moverSuave 5s linear forwards; }
+        @keyframes moverSuave { 
+            0% { left: -150px; transform: rotate(0deg); } 
+            10% { transform: rotate(2deg); }
+            90% { transform: rotate(-2deg); }
+            100% { left: 100vw; transform: rotate(0deg); } 
+        }
+
+        /* Efecto chispas */
+        #canvas-chispas { 
+            position: fixed; 
+            top: 0; left: 0; 
+            pointer-events: none; 
+            z-index: 9999; 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo principal -->
+    <div id="logo-principal">
+        <img src="rojologo.jpg" alt="Logotipo oficial de ROJO Ingeniería Automotriz">
+    </div>
+
+    <!-- Galería con descripciones completas -->
+    <div class="galeria">
+        <div class="item" onclick="abrir('rojo1.jpg')">
+            <img src="rojo1.jpg" alt="Identidad visual y proyectos generales de ROJO">
+            <p>Identidad ROJO</p>
+        </div>
+        <div class="item" onclick="abrir('rojo2.png')">
+            <img src="rojo2.png" alt="Evaluación técnica y sistemas de carga automotriz">
+            <p>Sistemas de Carga</p>
+        </div>
+        <div class="item" onclick="abrir('rojo3.jpg')">
+            <img src="rojo3.jpg" alt="Proyectos de transmisión y mecánica especializada">
+            <p>Mecánica Especializada</p>
+        </div>
+        <div class="item" onclick="abrir('rojo4.jpg')">
+            <img src="rojo4.jpg" alt="Diseño y reparación de circuitos electrónicos">
+            <p>Electrónica Aplicada</p>
+        </div>
+        <div class="item" onclick="abrir('rojo5.jpg')">
+            <img src="rojo5.jpg" alt="Modificaciones de suspensión y chasis">
+            <p>Modificaciones</p>
+        </div>
+        <div class="item" onclick="abrir('rojo6.jpg')">
+            <img src="rojo6.jpg" alt="Vehículos 4x4 y proyectos todo terreno">
+            <p>Proyectos 4x4</p>
+        </div>
+        <div class="item" onclick="abrir('rojo7.png')">
+            <img src="rojo7.png" alt="Tableros digitales inteligentes personalizados">
+            <p>Tableros Inteligentes</p>
+        </div>
+        <div class="item" onclick="abrir('rojo8.jpg')">
+            <img src="rojo8.jpg" alt="Reparación y optimización de motores">
+            <p>Motores y Ajustes</p>
+        </div>
+        <div class="item" onclick="abrir('rojoimagencambia (1).jpg')">
+            <img src="rojoimagencambia (1).jpg" alt="Instrumentación y tableros personalizados">
+            <p>Tableros Personalizados</p>
+        </div>
+        <div class="item" onclick="abrir('rojoimagencambia (2).jpg')">
+            <img src="rojoimagencambia (2).jpg" alt="Sistemas de potencia y rendimiento">
+            <p>Sistemas de Potencia</p>
+        </div>
+        <div class="item" onclick="abrir('rojoimagencambia (3).jpg')">
+            <img src="rojoimagencambia (3).jpg" alt="Componentes y sistemas de transmisión">
+            <p>Transmisión</p>
+        </div>
+        <div class="item" onclick="abrir('rojoimagencambia (4).jpg')">
+            <img src="rojoimagencambia (4).jpg" alt="Desarrollo de circuitos electrónicos propios">
+            <p>Circuitos Propios</p>
+        </div>
+    </div>
+
+    <!-- Bocho volador -->
+    <img id="bocho-volador" src="bocho.png" alt="Vocho clásico modificado por ROJO">
+
+    <!-- Enlace a SIDC -->
+    <a href="https://debians4.github.io/Subministros-Integrales-S.I.D.C./" id="logo-sidc" target="_blank" rel="noopener noreferrer">
+        <img src="sidc.png" alt="Ir a SIDC - Servicios Integrales Cázares">
+    </a>
+
+    <!-- Visor y efectos -->
+    <div id="visor" onclick="this.style.display='none'">
+        <img id="imgGrande" src="" alt="Vista ampliada del proyecto">
+    </div>
+    <canvas id="canvas-chispas"></canvas>
+
+    <script>
+        // Función para abrir imágenes
+        function abrir(src) { 
+            document.getElementById("imgGrande").src = src; 
+            document.getElementById("visor").style.display = "flex"; 
+        }
+        
+        // Animación del Bocho: vuela cada 10 segundos
+        setInterval(() => {
+            const b = document.getElementById("bocho-volador");
+            b.classList.add("vuelo");
+            setTimeout(() => b.classList.remove("vuelo"), 5000);
+        }, 10000);
+
+        // Efecto de chispas al hacer clic
+        const canvas = document.getElementById('canvas-chispas');
+        canvas.width = window.innerWidth; 
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        
+        window.addEventListener('click', (e) => {
+            for(let i=0; i<20; i++) crearChispa(e.clientX, e.clientY);
+        });
+
+        function crearChispa(x, y) {
+            let p = { x, y, vx: (Math.random()-0.5)*10, vy: (Math.random()-0.5)*10, alpha: 1 };
+            let anim = setInterval(() => {
+                ctx.fillStyle = `rgba(255, 69, 0, ${p.alpha})`;
+                ctx.beginPath(); 
+                ctx.arc(p.x, p.y, 2, 0, Math.PI*2); 
+                ctx.fill();
+                p.x += p.vx; 
+                p.y += p.vy; 
+                p.alpha -= 0.05;
+                if (p.alpha <= 0) clearInterval(anim);
+            }, 30);
+        }
+
+        // Ajustar canvas si cambia el tamaño de pantalla
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+<style>
+.btn-flotante{position:fixed;right:20px;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;z-index:1001;transition:.3s;border:2px solid rgba(255,255,255,.3)}
+.btn-flotante:hover{transform:scale(1.15);border-color:#fff}
+.whatsapp{bottom:220px;background:#25d366;box-shadow:0 0 20px rgba(37,211,102,.5)}
+.instagram{bottom:150px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);box-shadow:0 0 20px rgba(220,39,67,.5)}
+.mapa-ubicacion{position:fixed;bottom:20px;right:20px;width:140px;height:120px;border:2px solid #ff0000;border-radius:8px;overflow:hidden;box-shadow:0 0 15px rgba(255,0,0,.4);z-index:1000}
+.mapa-ubicacion iframe{width:100%;height:100%;border:none}
+</style>
+
+<a href="https://wa.me/528116798738" class="btn-flotante whatsapp" target="_blank" rel="noopener noreferrer" title="WhatsApp">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.57-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zm-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.89 9.88z"/></svg>
+</a>
+
+<a href="https://www.instagram.com/rojo_cazares?igsh=MWRldHdicmRiMmozMw==" class="btn-flotante instagram" target="_blank" rel="noopener noreferrer" title="Instagram">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.26.07 1.64.07 4.85 0 3.2-.01 3.58-.07 4.85-.15 3.22-1.66 4.77-4.92 4.92-1.26.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85 0-3.2.01-3.58.07-4.85.15-3.23 1.66-4.77 4.92-4.92 1.26-.06 1.64-.07 4.85-.07zm0-2.16c-3.26 0-3.67.01-4.95.07-4.36.2-6.78 2.62-6.98 6.98-.06 1.28-.07 1.69-.07 4.95 0 3.26.01 3.67.07 4.95.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07 3.26 0 3.67-.01 4.95-.07 4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.2-4.35-2.62-6.78-6.98-6.98-1.28-.06-1.69-.07-4.95-.07zm0 5.84c-3.4 0-6.16 2.76-6.16 6.16s2.76 6.16 6.16 6.16 6.16-2.76 6.16-6.16c0-3.4-2.76-6.16-6.16-6.16zm0 10.16c-2.21 0-4-1.79-4-4 0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.21-1.79 4-4 4zm6.41-11.84c-.8 0-1.44.64-1.44 1.44s.64 1.44 1.44 1.44c.79 0 1.44-.64 1.44-1.44s-.65-1.44-1.44-1.44z"/></svg>
+</a>
+
+<div class="mapa-ubicacion" title="Ubicación: 5 de Mayo #510, Apodaca Centro">
+<iframe src="https://www.google.com/maps?q=Calle+5+de+Mayo+510,+Apodaca+Centro,+Entre+Reforma+y+Oaxaca,+Apodaca,+Nuevo+Le%C3%B3n&output=embed" loading="lazy"></iframe>
+</div>
+</body>
+</html>
